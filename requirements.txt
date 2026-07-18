@@ -1,0 +1,38 @@
+# ============================================================
+# IDAM — Intelligent Automated Retail Store Backend
+# requirements.txt
+#
+# Install with: pip install -r requirements.txt
+#
+# Phase 2 + 3 + 4 + 5 + 6 + 7 dependencies.
+# ============================================================
+
+
+# ----------------------------
+# Web Framework
+# ----------------------------
+fastapi==0.115.0          # High-performance async web framework
+uvicorn[standard]==0.30.6 # ASGI server to run FastAPI
+
+# ----------------------------
+# Database
+# ----------------------------
+sqlalchemy==2.0.36        # ORM for SQLite (sync mode for simplicity)
+
+# ----------------------------
+# Configuration & Environment
+# ----------------------------
+pydantic-settings==2.5.2  # Load settings from .env with type validation
+python-dotenv==1.0.1      # Read .env file into environment variables
+
+# ----------------------------
+# Phase 5: Embeddings & Vector Search
+# ----------------------------
+chromadb==0.5.23                  # Local persistent vector database
+sentence-transformers==3.3.1      # HuggingFace embedding model runner (all-MiniLM-L6-v2)
+
+# ----------------------------
+# Phase 6: LLM Providers
+# ----------------------------
+groq                              # Groq Cloud SDK (primary LLM — Llama 3.3 70B)
+google-genai                      # Google Gemini SDK — modern SDK (fallback LLM)

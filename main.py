@@ -17,6 +17,8 @@ from app.api import orders
 from app.api import search
 # Phase 6 routers
 from app.api import llm
+# Phase 8 routers
+from app.api import recommendations
 # Phase 5 — ChromaDB + indexing pipeline
 from app.ai.vectordb.chroma_client import init_chroma
 from app.ai.vectordb.product_index import index_all_products
@@ -128,9 +130,7 @@ app.include_router(orders.router,    prefix="/orders",    tags=["Orders"])
 app.include_router(search.router,    prefix="/search",    tags=["Semantic Search"])
 
 # Phase 6
-app.include_router(llm.router,       prefix="/llm",       tags=["LLM"])
+app.include_router(llm.router,             prefix="/llm",             tags=["LLM"])
 
-# Phase 7+:
-# from app.api import chat, recommendations
-# app.include_router(chat.router,            prefix="/chat",            tags=["Chat"])
-# app.include_router(recommendations.router, prefix="/recommendations", tags=["Recommendations"])
+# Phase 8
+app.include_router(recommendations.router, prefix="/recommendations", tags=["Recommendations"])

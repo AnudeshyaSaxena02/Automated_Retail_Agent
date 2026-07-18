@@ -122,6 +122,31 @@ class Settings(BaseSettings):
         ),
     )
 
+    # ----------------------------
+    # Recommendation Engine (Phase 8)
+    # ----------------------------
+    recommendation_top_k: int = Field(
+        default=10,
+        alias="RECOMMENDATION_TOP_K",
+        ge=1,
+        le=50,
+        description=(
+            "Number of products to return from the recommendation engine. "
+            "Higher values give more recommendations but slow scoring slightly."
+        ),
+    )
+
+    recommendation_recency_days: int = Field(
+        default=30,
+        alias="RECOMMENDATION_RECENCY_DAYS",
+        ge=1,
+        le=365,
+        description=(
+            "Products purchased within this many days are excluded from recommendations. "
+            "Default 30 days — avoids re-recommending very recent purchases."
+        ),
+    )
+
     class Config:
         """
         Tell Pydantic where to find the .env file.

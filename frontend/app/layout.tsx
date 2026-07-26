@@ -2,8 +2,10 @@
 // app/layout.tsx
 //
 // Root layout — wraps every page with:
-//   1. ThemeProvider  (next-themes dark/light mode)
-//   2. QueryProvider  (TanStack Query v5)
+//   1. ThemeProvider    (next-themes dark/light mode)
+//   2. QueryProvider    (TanStack Query v5)
+//   3. TooltipProvider  (shadcn tooltip — required for Tooltip components)
+//   4. Toaster          (Sonner — shared toast notification infrastructure)
 //
 // Fonts: Geist Sans + Geist Mono (from next/font/google)
 // ============================================================
@@ -14,6 +16,8 @@ import "./globals.css";
 
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { QueryProvider } from "@/components/providers/query-provider";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -45,7 +49,12 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <ThemeProvider>
-          <QueryProvider>{children}</QueryProvider>
+          <QueryProvider>
+            <TooltipProvider>
+              {children}
+              <Toaster richColors position="top-right" />
+            </TooltipProvider>
+          </QueryProvider>
         </ThemeProvider>
       </body>
     </html>

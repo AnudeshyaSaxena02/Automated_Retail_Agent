@@ -25,8 +25,6 @@ import {
   Package,
   Users,
   Sparkles,
-  ShoppingCart,
-  BookOpen,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
@@ -63,18 +61,6 @@ const NAV_ITEMS: NavItem[] = [
     label: "AI Workspace",
     icon: Sparkles,
     href: "/ai",
-  },
-  {
-    label: "Orders",
-    icon: ShoppingCart,
-    disabled: true,
-    tooltipContent: "Order history is available on individual Customer profiles",
-  },
-  {
-    label: "Knowledge Center",
-    icon: BookOpen,
-    disabled: true,
-    tooltipContent: "Coming in a future release",
   },
 ];
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -17,6 +17,9 @@ import {
 } from "lucide-react";
 import { getHealth, getRoot, type HealthResponse, type RootResponse } from "@/services/healthService";
 import { useSearchStatus } from "@/hooks/useSearchStatus";
+import { indexAllProducts } from "@/services/searchService";
+import { toast } from "sonner";
+import { extractApiError } from "@/types/api";
 
 function StatusIcon({ state, className }: { state: "operational" | "degraded" | "unavailable" | "checking" | "unknown", className?: string }) {
   switch (state) {
@@ -33,6 +36,7 @@ function StatusIcon({ state, className }: { state: "operational" | "degraded" | 
 
 export default function SystemPage() {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? "Unknown";
+  const queryClient = useQueryClient();
 
   const {
     data: health,
@@ -68,6 +72,29 @@ export default function SystemPage() {
     refetchHealth();
     refetchRoot();
     refetchSearch();
+  };
+
+  const reindexMutation = useMutation({
+    mutationFn: indexAllProducts,
+    onSuccess: (data) => {
+      toast.success("Re-indexing complete", {
+        description: data.message,
+      });
+      refetchSearch();
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+    },
+    onError: (error) => {
+      const apiError = extractApiError(error as Error);
+      toast.error("Re-indexing failed", {
+        description: apiError.message,
+      });
+    },
+  });
+
+  const handleReindex = () => {
+    if (window.confirm("Are you sure you want to re-index the entire product catalog? This is a resource-intensive operation.")) {
+      reindexMutation.mutate();
+    }
   };
 
   const isInitialLoading = (healthLoading && !health) || (searchLoading && !search);
@@ -227,6 +254,19 @@ export default function SystemPage() {
                     <p>{searchError ? "Vector database unreachable." : search ? "ChromaDB index connected." : "Checking..."}</p>
                     {search && (
                       <p className="text-muted-foreground text-xs">Model: {search.model}</p>
+                    )}
+                    {search && (
+                      <div className="pt-2">
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          onClick={handleReindex} 
+                          disabled={reindexMutation.isPending}
+                        >
+                          <RefreshCw className={`mr-2 h-3.5 w-3.5 ${reindexMutation.isPending ? "animate-spin" : ""}`} aria-hidden="true" />
+                          {reindexMutation.isPending ? "Re-indexing..." : "Re-index Catalog"}
+                        </Button>
+                      </div>
                     )}
                   </div>
                 </div>

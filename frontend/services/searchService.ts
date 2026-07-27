@@ -9,7 +9,7 @@
 // ============================================================
 
 import { apiClient } from "@/lib/api-client";
-import type { IndexStatusResponse, SemanticSearchResponse } from "@/types/contracts/search";
+import type { IndexStatusResponse, SemanticSearchResponse, IndexAllResponse, SingleIndexResponse } from "@/types/contracts/search";
 
 export async function getSearchStatus(): Promise<IndexStatusResponse> {
   const response = await apiClient.get<IndexStatusResponse>("/search/status");
@@ -26,5 +26,15 @@ export async function getSemanticSearch(
     params.min_score = minScore;
   }
   const response = await apiClient.get<SemanticSearchResponse>("/search/semantic", { params });
+  return response.data;
+}
+
+export async function indexAllProducts(): Promise<IndexAllResponse> {
+  const response = await apiClient.post<IndexAllResponse>("/search/index");
+  return response.data;
+}
+
+export async function indexSingleProduct(productId: string): Promise<SingleIndexResponse> {
+  const response = await apiClient.post<SingleIndexResponse>(`/search/index/${productId}`);
   return response.data;
 }

@@ -14,6 +14,7 @@ import { ErrorBanner } from "@/components/shared/ErrorBanner";
 import { LoadingSkeleton } from "@/components/shared/LoadingSkeleton";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { SemanticProductCard } from "@/components/products/SemanticProductCard";
+import { ProductNavigation } from "@/components/products/ProductNavigation";
 import { useSemanticSearch } from "@/hooks/useSemanticSearch";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -44,9 +45,10 @@ function SemanticSearchContent() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Smart Search"
-        description="Search using natural language. For example: 'gaming laptop for AI development' or 'wireless headphones under ₹5000'."
+        title="Products"
+        description="Manage your store's inventory and discover products."
       />
+      <ProductNavigation />
 
       <div className="bg-card border border-border p-4 rounded-lg flex gap-2 items-center">
         <Sparkles className="h-5 w-5 text-primary shrink-0" />
@@ -68,7 +70,7 @@ function SemanticSearchContent() {
         {!activeQuery ? (
           <EmptyState
             icon={Sparkles}
-            title="AI Semantic Search"
+            title="Smart Search"
             description="Type a natural language query above to find semantically related products, even if they don't share exact keywords."
           />
         ) : error ? (

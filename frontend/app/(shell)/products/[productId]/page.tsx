@@ -8,7 +8,7 @@
 // ============================================================
 
 import { use, Suspense } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useProduct } from "@/hooks/useProduct";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { ErrorBanner } from "@/components/shared/ErrorBanner";
@@ -25,7 +25,19 @@ interface ProductDetailsPageProps {
 
 function ProductDetailsContent({ productId }: { productId: string }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { data: product, isLoading, error, refetch } = useProduct(productId);
+
+  const from = searchParams.get("from");
+  const q = searchParams.get("q");
+
+  const handleBack = () => {
+    if (from === "search") {
+      router.push(`/products/search${q ? `?q=${encodeURIComponent(q)}` : ""}`);
+    } else {
+      router.push("/products");
+    }
+  };
 
   if (isLoading) {
     return (
@@ -40,8 +52,8 @@ function ProductDetailsContent({ productId }: { productId: string }) {
   if (error || !product) {
     return (
       <div className="space-y-6">
-        <Button variant="ghost" onClick={() => router.push("/products")}>
-          <ArrowLeft className="mr-2 h-4 w-4" /> Back to Catalog
+        <Button variant="ghost" onClick={handleBack}>
+          <ArrowLeft className="mr-2 h-4 w-4" /> {from === "search" ? "Back to Smart Search" : "Back to Catalog"}
         </Button>
         <ErrorBanner
           message={`Failed to load product '${productId}'. It may not exist.`}
@@ -59,10 +71,10 @@ function ProductDetailsContent({ productId }: { productId: string }) {
       <div>
         <Button
           variant="ghost"
-          onClick={() => router.push("/products")}
+          onClick={handleBack}
           className="text-muted-foreground hover:text-foreground -ml-4"
         >
-          <ArrowLeft className="mr-2 h-4 w-4" /> Back to Catalog
+          <ArrowLeft className="mr-2 h-4 w-4" /> {from === "search" ? "Back to Smart Search" : "Back to Catalog"}
         </Button>
       </div>
 

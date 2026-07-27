@@ -23,6 +23,7 @@ import { EmptyState } from "@/components/shared/EmptyState";
 import { ProductTable } from "@/components/products/ProductTable";
 import { ProductToolbar } from "@/components/products/ProductToolbar";
 import { ProductForm } from "@/components/products/ProductForm";
+import { ProductNavigation } from "@/components/products/ProductNavigation";
 import { useProducts } from "@/hooks/useProducts";
 import { useProductSearch } from "@/hooks/useProductSearch";
 import { useCreateProduct } from "@/hooks/useCreateProduct";
@@ -141,9 +142,10 @@ function ProductsPageContent() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Product Catalog"
-        description="Manage your store's inventory, prices, and specifications."
+        title="Products"
+        description="Manage your store's inventory and discover products."
       />
+      <ProductNavigation />
 
       <ProductToolbar
         searchQuery={q}

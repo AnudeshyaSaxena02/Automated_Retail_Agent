@@ -4,7 +4,7 @@
 // components/products/SemanticProductCard.tsx
 // ============================================================
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { formatCurrency } from "@/utils/formatCurrency";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -16,6 +16,9 @@ interface SemanticProductCardProps {
 
 export function SemanticProductCard({ product }: SemanticProductCardProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const currentQ = searchParams.get("q") || "";
+  const targetUrl = `/products/${product.product_id}?from=search${currentQ ? `&q=${encodeURIComponent(currentQ)}` : ""}`;
 
   // Color-code the similarity score
   const score = product.similarity_score;
@@ -27,13 +30,13 @@ export function SemanticProductCard({ product }: SemanticProductCardProps) {
   return (
     <Card 
       className="flex flex-col cursor-pointer hover:border-primary/50 transition-colors"
-      onClick={() => router.push(`/products/${product.product_id}`)}
+      onClick={() => router.push(targetUrl)}
       role="button"
       tabIndex={0}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
-          router.push(`/products/${product.product_id}`);
+          router.push(targetUrl);
         }
       }}
     >

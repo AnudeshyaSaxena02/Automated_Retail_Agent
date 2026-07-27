@@ -37,6 +37,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { extractApiError } from "@/types/api";
 
 // ── KPI Card ──────────────────────────────────────────────────
@@ -119,6 +120,7 @@ function QuickAction({ label, description, href, icon }: QuickActionProps) {
 // ── Dashboard Page ────────────────────────────────────────────
 
 export default function DashboardPage() {
+  const router = useRouter();
   const productCount = useProductCount();
   const customers = useCustomers();
   const searchStatus = useSearchStatus();
@@ -396,11 +398,12 @@ export default function DashboardPage() {
                 {displayedCustomers.map((customer, index) => (
                   <tr
                     key={customer.customer_id}
-                    className={
+                    onClick={() => router.push(`/customers/${customer.customer_id}`)}
+                    className={`cursor-pointer hover:bg-muted/50 transition-colors ${
                       index < displayedCustomers.length - 1
                         ? "border-b border-border"
                         : ""
-                    }
+                    }`}
                   >
                     <td className="py-3 px-4 font-mono text-xs text-muted-foreground">
                       {customer.customer_id}
@@ -417,8 +420,10 @@ export default function DashboardPage() {
             </table>
             {(customers.data?.total ?? 0) > 5 && (
               <div className="border-t border-border px-4 py-2 text-xs text-muted-foreground">
-                Showing 5 of {customers.data?.total} customers. Full customer
-                management available in Phase 4.
+                Showing 5 of {customers.data?.total} customers.{" "}
+                <Link href="/customers" className="underline hover:text-foreground">
+                  View all customers
+                </Link>
               </div>
             )}
           </div>
